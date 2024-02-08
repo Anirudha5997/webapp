@@ -1,6 +1,6 @@
 // curl -vvvv http://localhost:8000/api/v1healthz
 
-const { getServerStatus } = require("../config/connection");
+const getServerStatus = require("../config/connStatus");
 
 const getHealth = async (req, res) => {
     try {
