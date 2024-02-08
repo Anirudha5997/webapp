@@ -1,51 +1,48 @@
 require('dotenv').config()
+const { Client } = require("pg")
 const { Sequelize } = require('sequelize');
+console.log("PG-ADMIN4 User",process.env.PGUSER)
+
+async function initialize()  {
+    return new Promise( async (resolve, reject) => {
+        const client = new Client({
+            host: process.env.HOST,
+            port: process.env.DBPORT,
+            user: process.env.PGUSER,
+            password: process.env.PASSWORD,
+        })
+    
+        try {
+            await client.connect();
+            console.log("inside try");
+            const result = await client.query(`SELECT 1 FROM pg_database WHERE datname='${process.env.DATABASE}';`);
+            
+            if(result.rowCount === 0){
+                await client.query('CREATE DATABASE ' + process.env.DATABASE);
+            }
+            await client.end();
+            resolve();
+            
+        } catch (error) {
+            console.log(error);
+            await client.end();
+            reject();
+        }
+    })
+    
+}
+
 
 const sequelize = new Sequelize(
     process.env.DATABASE,
-    process.env.USER,
+    process.env.PGUSER,
     process.env.PASSWORD,{
         host: process.env.HOST,
         dialect: 'postgres',
         port: process.env.DBPORT
     });
 
-const getServerStatus = async() => {
-    try {
-        await sequelize.authenticate();
-        console.log("Connection has been established successfully");
-        return true;
-    } catch (error) {
-        console.error("'Unable to connect to the database:'",error);
-        return false;
-    }
-}
-
 module.exports = {
-    getServerStatus
-};
-
-// const { Pool } = require('pg');
-
-// const pool = new Pool({
-//     user: process.env.USER,
-//     password: process.env.PASSWORD,
-//     port: process.env.DBPORT,
-//     host: process.env.HOST,
-//     database: process.env.DATABASE
-// });
-
-// const getPoolStatus = async () => {   
-//     try{
-//         const { rows } = await pool.query("SELECT current_user");
-//         const user = rows[0]['current_user']
-//         console.log("CURRENT DATABASE USER : ",user);
-//         if(user === 'anirudha'){
-//             return true;
-//         } return false; 
-
-//     } catch (error){
-//     console.log(error);
-//     return false;
-//     }
-// }
+    sequelize,
+    initialize
+    }
