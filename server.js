@@ -28,4 +28,3 @@ initialize()
 app.listen(PORT, () => console.log("app is running on port 8000"));
 
 app.use("", appRouter);
-// console.log("this is a workflow test");
