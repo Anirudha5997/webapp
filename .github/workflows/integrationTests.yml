@@ -23,9 +23,10 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: ${{ secrets.DATABASE }}      
-          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
-          POSTGRES_USER: ${{ secrets.PGUSER }}
+          ENV_VAR: ${{ secrets.ENV_VAR }}
+          POSTGRES_DB: webapp
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -45,6 +46,9 @@ jobs:
 
       - name: installing dependencies
         run: npm install
+      
+      - name: save .env files
+        run: echo "$ENV_VAR" > .env
 
       - name: run tests
         run: npm run test
