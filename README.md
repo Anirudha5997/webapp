@@ -1,3 +1,4 @@
+
 ### ssh -i "/Users/anirudha/.ssh/digitalOcecean" root@64.23.176.158 to login into vm
 ### scp -i "/Users/anirudha/.ssh/digitalOcecean" Anirudha_Dudhasagare_\ 002697516_02.zip 
 ### env root@164.92.111.157:/home to copy files from local to vm
