@@ -1,20 +1,27 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI Integration Tests
+name: Node Integration Tests
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "Assignment_03" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Integration Tests
-        uses: npm run test
+      - uses: actions/checkout@v3
 
-      - name: hello world
-        uses: echo hello world
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: installing dependencies
+        run: npm install
+
+      - name: run tests
+        run: npm run test
