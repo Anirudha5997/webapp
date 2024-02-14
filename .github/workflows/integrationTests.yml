@@ -37,6 +37,8 @@ jobs:
           node-version: '20.x'
       
       - name: save .env files
+        env:
+          ENV_VAR: ${{ secrets.ENV_VAR }}
         run: echo "$ENV_VAR" > .env
 
       - name: run bash script
