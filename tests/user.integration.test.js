@@ -1,10 +1,8 @@
 const express = require("express");
 const request = require("supertest");
 const appRouter = require("../routes/routes");
-const { getUser } = require("../controllers/userControllers");
 
 const app = express();
-
 app.use(express.json()); // returns json body object
 app.use("", appRouter);
 

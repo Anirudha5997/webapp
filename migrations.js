@@ -1,17 +1,6 @@
-const express = require("express");
-const cors = require('cors');
-const appRouter = require("./routes/routes");
+//create migrations
 const {sequelize, initialize} = require("./config/connection");
 const User = require("./models/userModel");
-
-
-require('dotenv').config()
-const PORT = 8000;
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
 initialize()
     .then(_ => {
         sequelize.sync({alter: true})
@@ -24,7 +13,3 @@ initialize()
     .catch(e => {
         console.log("Initialize Error", e)
     });
-
-app.listen(PORT, () => console.log("app is running on port 8000"));
-
-app.use("", appRouter);
