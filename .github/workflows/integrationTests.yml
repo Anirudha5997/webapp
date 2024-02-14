@@ -6,11 +6,34 @@ name: Node Integration Tests
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   pull_request:
-    branches: [ "main", "Assignment_03" ]
+    branches: [ "main" ]
+
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      DATABASE: ${{ secrets.DATABASE }}
+      DBPORT: ${{ secrets.DBPORT }}
+      HOST: ${{ secrets.HOST }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      PGUSER: ${{ secrets.PGUSER }}
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: ${{ secrets.DATABASE }}      
+          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
+          POSTGRES_USER: ${{ secrets.PGUSER }}
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v3
