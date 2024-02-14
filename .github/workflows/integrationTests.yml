@@ -27,7 +27,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
           POSTGRES_USER: ${{ secrets.PGUSER }}
         ports:
-          - 5432:5432
+          - ${{ secrets.DBPORT }}:${{ secrets.DBPORT }}
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
