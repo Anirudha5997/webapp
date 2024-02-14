@@ -1,7 +1,7 @@
-require('dotenv').config()
-const { Client } = require("pg")
+require('dotenv').config();
+const { Client } = require("pg");
 const { Sequelize } = require('sequelize');
-console.log("PG-ADMIN4 User",process.env.PGUSER)
+console.log("PG-ADMIN4 User",process.env.PGUSER);
 
 async function initialize()  {
     return new Promise( async (resolve, reject) => {
