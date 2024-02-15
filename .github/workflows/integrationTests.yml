@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Node Integration Tests
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  pull_request:
+    branches: [ "main" ]
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: webapp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      
+      - name: save .env files
+        env:
+          ENV_VAR: ${{ secrets.ENV_VAR }}
+        run: echo "$ENV_VAR" > .env
+
+      - name: run bash script
+        run: |
+          chmod 755 run_test.sh
+          ./run_test.sh
+          
