@@ -40,8 +40,6 @@ jobs:
             pwd
             packer init .
 
-      - name: files check
-        run: ls -al
 
       - name: Run `packer fmt`
         id: fmt
@@ -49,9 +47,12 @@ jobs:
             PACKER_CONFIG: ${{secrets.PACKER_CONFIG}}
         run: |
             pwd
+            cd packer/
+            pwd
+            echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
             ls -al
-            echo "$PACKER_CONFIG" > ./packer/values.pkrvars.hcl
             packer fmt -var-file="values.pkrvars.hcl" .
+            
 
       - name: files check
         run: ls -al
