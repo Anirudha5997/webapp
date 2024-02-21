@@ -34,10 +34,7 @@ jobs:
         id: init
         run: 
             |
-            pwd
             cd packer/
-            ls -al
-            pwd
             packer init .
 
 
@@ -46,22 +43,13 @@ jobs:
         env: 
             PACKER_CONFIG: ${{secrets.PACKER_CONFIG}}
         run: |
-            pwd
             cd packer/
-            pwd
             echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
-            ls -al
             packer fmt .
     
       - name: Run `packer validate`
         id: validate
         run: |
-            pwd
             cd packer/
             pwd
             packer validate -var-file="values.pkrvars.hcl" .
-            pwd
-        
-        
-  
-          
