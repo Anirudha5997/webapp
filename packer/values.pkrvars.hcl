@@ -1,0 +1,6 @@
+project_id          = "scientific-pad-414923"
+zone                = "us-east1-b"
+image_name          = "dev-webapp"
+source_image_family = "centos-stream-8"
+machine_type        = "e2-medium"
+ssh_username        = "development"
