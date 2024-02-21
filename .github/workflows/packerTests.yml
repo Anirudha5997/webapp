@@ -51,15 +51,16 @@ jobs:
             pwd
             echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
             ls -al
-            packer fmt -var-file="values.pkrvars.hcl" .
-            
-
-      - name: files check
-        run: ls -al
+            packer fmt .
     
       - name: Run `packer validate`
         id: validate
-        run: packer validate -var-file="values.pkrvars.hcl" .
+        run: |
+            pwd
+            cd packer/
+            pwd
+            packer validate -var-file="values.pkrvars.hcl" .
+            pwd
         
         
   
