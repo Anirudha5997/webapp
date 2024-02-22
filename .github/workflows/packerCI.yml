@@ -1,0 +1,85 @@
+name: Packer Continuous Integration
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+
+jobs:
+  build-artifact:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: save .env files
+        env:
+         ENV_VAR: ${{ secrets.ENV_VAR }}
+        run: echo "$ENV_VAR" > .env
+
+      - name: creating zip
+        run: |
+          sudo apt install zip -y
+          pwd
+          ls -al 
+          zip webapp.zip ./* -x packer/
+
+      - uses: actions/upload-artifact@v4
+        with: 
+          name: webapp.zip
+          path: ./webapp.zip
+    
+
+  build-packer-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        id: 'auth'
+      
+      - uses: actions/download-artifact@v4
+        with:
+          name: webapp.zip
+          path: ./webapp.zip
+
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_PROFILE }}'
+
+      - name: Set up gcloud sdk
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
+      - name: Setup HashiCorp Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+            version: "latest"
+
+      - name: Run `packer init`
+        id: init
+        run: 
+          |
+          cd packer/
+          packer init .
+
+      - name: Run `packer validate`
+        id: validate
+        env: 
+            PACKER_CONFIG: ${{secrets.PACKER_CONFIG}}
+        run: |
+            cd packer/
+            echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
+            packer validate -var-file="values.pkrvars.hcl" .
+
+      - name: Run `packer build`
+        id: build
+        run: |
+            cd packer/
+            echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
+            packer build -var-file="values.pkrvars.hcl" .
+
+      
+

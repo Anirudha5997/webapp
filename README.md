@@ -19,7 +19,7 @@
 ### sudo -i -u postgres
  
 ### CREATE PG USER 
-### createuser --interactive --pwprompt
+### createuser --interactive --pwprompt --superuser
  
 ### Manual createUser
 ### man createuser

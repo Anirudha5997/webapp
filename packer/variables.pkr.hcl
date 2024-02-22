@@ -21,3 +21,7 @@ variable machine_type {
 variable ssh_username {
   type = string
 }
+
+variable pg_password {
+  type = string
+}
