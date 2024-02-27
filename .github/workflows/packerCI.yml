@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
+      - uses: actions/checkout@v3
+
       - name: save .env files
         env:
          ENV_VAR: ${{ secrets.ENV_VAR }}
@@ -31,11 +33,11 @@ jobs:
     
 
   build-packer-image:
+    needs: build-artifact
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
-        id: 'auth'
       
       - uses: actions/download-artifact@v4
         with:
@@ -77,8 +79,9 @@ jobs:
       - name: Run `packer build`
         id: build
         run: |
+            pwd 
             cd packer/
-            echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
+            pwd
             packer build -var-file="values.pkrvars.hcl" .
 
       

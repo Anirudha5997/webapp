@@ -2,11 +2,6 @@ build {
   name    = "packer-build"
   sources = ["source.googlecompute.centOS"]
 
-  provisioner "shell" {
-    script = "./initial.sh"
-  }
-
-
   provisioner "file" {
     source      = "../webapp.zip"
     destination = "/tmp/webapp.zip"
@@ -56,7 +51,6 @@ build {
   }
 
   provisioner "shell" {
-
     inline = [
       "cd /tmp/",
       "ls -al",
@@ -95,7 +89,6 @@ build {
       "sudo systemctl status csye6225.service",
       "echo ##################################3",
       "journalctl -u csye6225.service"
-
     ]
   }
 }
