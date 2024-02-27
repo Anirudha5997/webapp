@@ -8,28 +8,45 @@ on:
   pull_request:
     branches: [ "main" ]
 
-
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:12
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: webapp
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+    # services:
+    #   postgres:
+    #     image: postgres:12
+    #     env:
+    #       POSTGRES_USER: postgres
+    #       POSTGRES_PASSWORD: postgres
+    #       POSTGRES_DB: webapp
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
+    #     ports:
+    #       - 5432:5432
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: setup pgsql db instance
+        run: |
+          sudo apt-get update -y
+          sudo apt install postgresql postgresql-contrib
+          sudo systemctl start postgresql.service
+          pwd
+          ls -al
+          sudo apt-get install -y expect
+          cd /packer/
+          pwd
+          sudo expect pg_user_setup.exp ${{ secrets.PG_PASSWORD }}
+          cd -
+          pwd
+          sudo systemctl restart postgresql
+          sudo mv -f /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.bak
+          sudo mv -f /packer/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf
+          sudo cat /var/lib/pgsql/data/pg_hba.conf
+          sudo systemctl restart postgresql
 
       - name: install node
         uses: actions/setup-node@v3
