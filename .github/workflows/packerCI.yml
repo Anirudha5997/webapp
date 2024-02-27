@@ -6,7 +6,6 @@ on:
   push:
     branches: [ "main" ]
 
-
 jobs:
   build-artifact:
     runs-on: ubuntu-latest
@@ -83,6 +82,3 @@ jobs:
             cd packer/
             pwd
             packer build -var-file="values.pkrvars.hcl" .
-
-      
-

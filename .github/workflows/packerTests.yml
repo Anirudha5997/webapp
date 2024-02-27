@@ -30,13 +30,24 @@ jobs:
         with:
             version: "latest"
 
+      - name: save .env files
+        env:
+          ENV_VAR: ${{ secrets.ENV_VAR }}
+        run: echo "$ENV_VAR" > .env
+
+      - name: creating zip
+        run: |
+          sudo apt install zip -y
+          pwd
+          ls -al 
+          zip webapp.zip ./* -x packer/
+
       - name: Run `packer init`
         id: init
         run: 
             |
             cd packer/
             packer init .
-
 
       - name: Run `packer fmt`
         id: fmt
