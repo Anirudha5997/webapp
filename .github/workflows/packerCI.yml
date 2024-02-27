@@ -41,7 +41,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: webapp.zip
-          path: ./webapp.zip
+          path: ./
 
       - name: 'Authenticate to Google Cloud'
         id: 'auth'
