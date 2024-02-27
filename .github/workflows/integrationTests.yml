@@ -41,7 +41,7 @@ jobs:
           cd packer/
           pwd
           sudo expect pg_user_setup.exp ${{ secrets.PG_PASSWORD }}
-          sudo cd -
+          cd -
           pwd
           sudo systemctl restart postgresql
           sudo mv -f /etc/postgresql/15/main/pg_hba.conf /etc/postgresql/15/main/pg_hba.conf.bak
