@@ -23,7 +23,7 @@ jobs:
           sudo apt install zip -y
           pwd
           ls -al 
-          zip webapp.zip ./* -x packer/
+          zip -r webapp.zip . -x '*packer*' -x '*.git*'
 
       - uses: actions/upload-artifact@v4
         with: 
