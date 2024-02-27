@@ -37,7 +37,8 @@ jobs:
           pwd
           ls -al
           sudo apt-get install -y expect
-          cd /packer/
+          pwd
+          cd webapp/packer/
           pwd
           sudo expect pg_user_setup.exp ${{ secrets.PG_PASSWORD }}
           cd -
