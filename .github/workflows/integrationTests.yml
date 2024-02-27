@@ -44,9 +44,9 @@ jobs:
           cd -
           pwd
           sudo systemctl restart postgresql
-          sudo mv -f /etc/postgresql/15/main/pg_hba.conf /etc/postgresql/15/main/pg_hba.conf.bak
-          sudo mv -f /packer/pg_hba.conf /etc/postgresql/15/main/pg_hba.conf
-          sudo cat /etc/postgresql/15/main/pg_hba.conf
+          sudo mv -f /etc/postgresql/14/main/pg_hba.conf /etc/postgresql/14/main/pg_hba.conf.bak
+          sudo mv -f /packer/pg_hba.conf /etc/postgresql/14/main/pg_hba.conf
+          sudo cat /etc/postgresql/14/main/pg_hba.conf
           sudo systemctl restart postgresql
 
       - name: install node
