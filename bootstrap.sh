@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /home/prodApp/ || exit
-sudo npm i
+npm i
 pwd
 ls -al
-sudo node migrations.js
+node migrations.js

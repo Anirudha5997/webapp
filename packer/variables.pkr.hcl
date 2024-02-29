@@ -22,6 +22,6 @@ variable ssh_username {
   type = string
 }
 
-variable pg_password {
-  type = string
-}
+// variable pg_password {
+//   type = string
+// }

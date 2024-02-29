@@ -30,10 +30,10 @@ jobs:
         with:
             version: "latest"
 
-      - name: save .env files
-        env:
-          ENV_VAR: ${{ secrets.ENV_VAR }}
-        run: echo "$ENV_VAR" > .env
+      # - name: save .env files
+      #   env:
+      #     ENV_VAR: ${{ secrets.ENV_VAR }}
+      #   run: echo "$ENV_VAR" > .env
 
       - name: creating zip
         run: |
@@ -56,7 +56,8 @@ jobs:
         run: |
             cd packer/
             echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
-            packer fmt .
+            packer fmt -check . 
+            test $? -eq 0 || exit 1
     
       - name: Run `packer validate`
         id: validate
