@@ -55,9 +55,9 @@ jobs:
             PACKER_CONFIG: ${{secrets.PACKER_CONFIG}}
         run: |
             cd packer/
-            echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
             packer fmt -check . 
             test $? -eq 0 || exit 1
+            echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
     
       - name: Run `packer validate`
         id: validate
