@@ -55,7 +55,7 @@ build {
     script = "./ops_Agent_installation.sh"
   }
 
-    provisioner "file" {
+  provisioner "file" {
     source      = "./config.yaml"
     destination = "/tmp/config.yaml"
   }
