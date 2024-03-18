@@ -1,7 +1,10 @@
 require('dotenv').config();
 const { Client } = require("pg");
 const { Sequelize } = require('sequelize');
-console.log("PG-ADMIN4 User",process.env.PGUSER);
+
+require("./logger");
+const winston = require("winston");
+const webappLogger = winston.loggers.get("webappLogger");
 
 async function initialize()  {
     return new Promise( async (resolve, reject) => {
@@ -14,24 +17,26 @@ async function initialize()  {
     
         try {
             await client.connect();
-            console.log("inside try");
             const result = await client.query(`SELECT 1 FROM pg_database WHERE datname='${process.env.DATABASE}';`);
             
             if(result.rowCount === 0){
                 await client.query('CREATE DATABASE ' + process.env.DATABASE);
             }
+
+            console.log("DATABASE CONNECTION ESTABLISHED");
+            webappLogger.info("DATABASE CONNECTION ESTABLISHED");
             await client.end();
             resolve();
             
         } catch (error) {
-            console.log(error);
+            console.log(error, "Database connection UNSUCCESFUL");
+            webappLogger.error(error, "Database connection UNSUCCESFUL");
             await client.end();
             reject();
         }
     })
     
 }
-
 
 const sequelize = new Sequelize(
     process.env.DATABASE,

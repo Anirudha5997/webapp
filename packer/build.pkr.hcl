@@ -51,6 +51,19 @@ build {
     ]
   }
 
+  provisioner "shell" {
+    script = "./ops_Agent_installation.sh"
+  }
+
+    provisioner "file" {
+    source      = "./config.yaml"
+    destination = "/tmp/config.yaml"
+  }
+
+  provisioner "shell" {
+    script = "./ops_Agent_vm_config.sh"
+  }
+
   // provisioner "shell" {
   //   inline = [
   //     "cd /tmp/",
