@@ -26,8 +26,6 @@ build {
   //   script = "./systemd.sh"
   // }
 
-
-
   provisioner "shell" {
     script = "./initial.sh"
   }

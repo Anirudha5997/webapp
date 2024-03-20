@@ -12,4 +12,3 @@ winston.loggers.add('webappLogger',{
         new winston.transports.File({ filename: `webapp.log` }),
     ]
 });
-
