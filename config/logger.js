@@ -4,7 +4,7 @@ const {combine, timestamp, json, errors } = winston.format
 winston.loggers.add('webappLogger',{
     level: 'debug',
     format: combine(
-        timestamp(),
+        timestamp({format: "YYYY-MM-DD HH:mm:ss.sss"}),
         json(),
     ),
     transports:[
