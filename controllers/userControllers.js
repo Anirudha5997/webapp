@@ -31,7 +31,9 @@ const registerUser = async (req, res) => {
             account_created: user.account_created,
             account_updated: user.account_updated
         });
-        publishMessage(topic, username);
+        if(process.env.NODE_ENV != 'test'){
+            publishMessage(topic, username);
+        }
         webappLogger.info(`New User ${username} Registered Successfully`);
 
     } catch (error) {
