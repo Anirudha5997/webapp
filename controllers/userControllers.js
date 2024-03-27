@@ -32,7 +32,11 @@ const registerUser = async (req, res) => {
             account_updated: user.account_updated
         });
         if(process.env.NODE_ENV != 'test'){
-            publishMessage(topic, username);
+            publishMessage(topic, {
+                first_name: firstName,
+                last_name: lastName,
+                email: username
+            });
         }
         webappLogger.info(`New User ${username} Registered Successfully`);
 
