@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize")
+const { DataTypes, Sequelize } = require("sequelize")
 const {sequelize} = require("../config/connection")
 const bcrypt = require("bcrypt");
 
@@ -34,6 +34,19 @@ const User = sequelize.define("User",{
         },
         allowNull: false,
     },
+
+    token: {
+        type: DataTypes.UUID,
+    },
+
+    tokenExpiry: {
+        type: Sequelize.DATE,
+    },
+
+    isVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,   
+    }
 },
     {
         timestamps: true,

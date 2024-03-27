@@ -14,7 +14,7 @@ const getHealth = async (req, res) => {
             //Pragma has been deprecated as of now 
             //https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
             'X-Content-Type-Options': 'nosniff'
-        })
+        });
 
         if(req.method !== "GET") {
             webappLogger.info("User Request Method WRONG, healthz returns 405");
@@ -30,7 +30,7 @@ const getHealth = async (req, res) => {
         console.log("DATABASE CONNECTED : ",isUp);
 
         if(isUp) {
-            webappLogger.info("service is UP, healthz returns status 200 ")
+            webappLogger.info("service is UP, healthz returns status 200 ");
             return res.status(200).send();    
         }
 

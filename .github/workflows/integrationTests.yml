@@ -45,6 +45,12 @@ jobs:
           ENV_VAR: ${{ secrets.ENV_VAR }}
         run: echo "$ENV_VAR" > .env
 
+      - name: 'Authenticate to Google Cloud'
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
       - name: run bash script
         run: |
           chmod 755 run_test.sh

@@ -1,6 +1,7 @@
 const express = require("express");
 const request = require("supertest");
 const appRouter = require("../routes/routes");
+const User = require('../models/userModel');
 
 const app = express();
 app.use(express.json()); // returns json body object
@@ -24,7 +25,13 @@ describe("Integration tests for the account creation", () => {
         const createUserReq = await request(app)
         .post("/v1/user").send(data);
         expect(createUserReq.statusCode).toBe(201);
-      
+
+
+        await User.update({isVerified: true}, {
+            where: {
+                email: data.username,
+            }
+        });
         
         const {body, statusCode} = await request(app)
         .get("/v1/user/self")

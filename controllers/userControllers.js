@@ -1,8 +1,11 @@
 const User = require('../models/userModel');
-
 require("../config/logger");
+
 const winston = require("winston");
 const webappLogger = winston.loggers.get("webappLogger");
+
+const publishMessage = require('../config/cloudPubSub');
+const topic = process.env.GCP_TOPIC;
 
 const registerUser = async (req, res) => {
     try {
@@ -28,6 +31,7 @@ const registerUser = async (req, res) => {
             account_created: user.account_created,
             account_updated: user.account_updated
         });
+        publishMessage(topic, username);
         webappLogger.info(`New User ${username} Registered Successfully`);
 
     } catch (error) {
@@ -98,8 +102,47 @@ const updateUser = async (req, res) => {
     }
 }
 
+const verifyUser = async(req, res) => {
+    try {
+        const { uuid, user } = req.params;
+        const userdetails = await User.findOne({ where: { token: uuid, email: user } });
+        console.log("verification detail", userdetails.dataValues);
+
+        const time = new Date(userdetails?.dataValues?.tokenExpiry).valueOf() > new Date().valueOf();
+        console.log(time);
+
+        if(userdetails.dataValues.isVerified){
+            webappLogger.info(`${user} is already verified`);
+            res.status(208).json({ message: `${user} is already verified`});
+            return;
+        }
+
+        if(time){
+            await User.update({isVerified: true}, {
+                where: {
+                    email:user,
+                    token: uuid
+                }
+            });
+            webappLogger.info(`${user} Verified Successfully`);
+            res.status(200).json({message: `${user} Verified Successfully`});
+            return; 
+        } else {
+            webappLogger.warn(`Verification Link has Expired for User, ${user}`);
+            res.status(400).json({message: "Verification Link has Expired"});
+            return;
+        }
+    } catch (error) {
+        console.log(error);
+        webappLogger.error(`error occured while verifying the user`);
+        res.status(400).json({message: "error occured while verifying the user"});
+        return;
+    }
+};
+
 module.exports = {
     registerUser,
     getUser,
-    updateUser
+    updateUser,
+    verifyUser
 }

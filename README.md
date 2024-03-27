@@ -29,5 +29,3 @@
 ### sudo dnf module enable nodejs: 20
 ### sudo dnf install nodejs
 ### node --version
-
-random
