@@ -35,6 +35,13 @@ jobs:
           sudo cat /etc/postgresql/14/main/pg_hba.conf
           sudo systemctl restart postgresql
 
+
+      - name: 'Authenticate to Google Cloud'
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+        
       - name: install node
         uses: actions/setup-node@v3
         with:
@@ -44,12 +51,6 @@ jobs:
         env:
           ENV_VAR: ${{ secrets.ENV_VAR }}
         run: echo "$ENV_VAR" > .env
-
-      - name: 'Authenticate to Google Cloud'
-        id: 'auth'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       - name: run bash script
         run: |
