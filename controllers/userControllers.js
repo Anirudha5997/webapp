@@ -135,13 +135,13 @@ const verifyUser = async(req, res) => {
             return; 
         } else {
             webappLogger.warn(`Verification Link has Expired for User, ${user}`);
-            res.status(400).json({message: "Verification Link has Expired"});
+            res.status(403).json({message: "Verification Link has Expired"});
             return;
         }
     } catch (error) {
         console.log(error);
         webappLogger.error(`error occured while verifying the user`);
-        res.status(400).json({message: "error occured while verifying the user"});
+        res.status(403).json({message: "error occured while verifying the user"});
         return;
     }
 };
