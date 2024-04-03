@@ -28,19 +28,19 @@ const verifyToken = async (req, res, next) => {
 
         if(!user){
             webappLogger.info(`user not found`);
-            res.status(400).json({ message: "user not found"}); 
+            res.status(401).json({ message: "user not found"}); 
             return;
         }
 
         if(!passwordMatched){
             webappLogger.warn(`${user.email} tired logging with incorrect credentials`);
-            res.status(400).json({ message: "incorrect password"}); 
+            res.status(401).json({ message: "incorrect password"}); 
             return;
         }
 
         if(!isVerified){
             webappLogger.warn(`${user.email} is not verified`);
-            res.status(400).json({ message: `${user.email} is not a verified user`}); 
+            res.status(403).json({ message: `${user.email} is not a verified user`}); 
             return;
         }
 
@@ -53,7 +53,7 @@ const verifyToken = async (req, res, next) => {
 
     } catch (error) {
         console.log(error);
-        res.status(400).json({ message: error.message });
+        res.status(403).json({ message: error.message });
         webappLogger.error("Error in userAuth middleware");
         return;
     }
