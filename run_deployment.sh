@@ -12,7 +12,7 @@ disk_size=${10}
 disk_type=${11}
 image_name=${12}
 webapp_template_name=${13}
-startup_script=${14}
+startup_script="${14}"
 webapp_keyring=${15}
 crypto_key=${16}
 
