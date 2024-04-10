@@ -106,12 +106,12 @@ jobs:
         run: |
           pwd
           ls -al
-          vm_props=(gcloud secrets versions access 1 --secret="vm_props")
-          webapp_template_name=(gcloud secrets versions access 1 --secret="webapp_template_name")
-          startup_script=(gcloud secrets versions access 1 --secret="startup_script")
-          kms=(gcloud secrets versions access 1 --secret="kms")
-          chmod 755 run_deployment.sh 
-          ./run_deployment.sh $vm_props $image_output $webapp_template_name "$startup_script" $kms
+          vm_props=$(gcloud secrets versions access 1 --secret="vm_props")
+          webapp_template_name=$(gcloud secrets versions access 1 --secret="webapp_template_name")
+          startup_script=$(gcloud secrets versions access 1 --secret="startup_script")
+          kms=$(gcloud secrets versions access 1 --secret="kms")
+          chmod 755 run_deployment.sh
           echo $vm_props $webapp_template_name $startup_script $kms
+          ./run_deployment.sh $vm_props $image_output $webapp_template_name "$startup_script" $kms
           ls -al
           pwd
