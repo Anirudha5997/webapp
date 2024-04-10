@@ -35,7 +35,7 @@ jobs:
     needs: build-artifact
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.build.outputs.image_output }}
+      image_id: ${{ steps.build.outputs.image_id }}
     steps:
       - uses: actions/checkout@v3
       
@@ -82,8 +82,9 @@ jobs:
             ls -al
             cat manifest.json
             sudo apt install jq 
-            image_id=(jq '.builds[0].artifact_id' manifest.json)
-            echo "image_output=$image_id" >> $GITHUB_OUTPUT
+            image_id=$(jq '.builds[0].artifact_id' manifest.json)
+            echo $image_id
+            echo $image_id >> $GITHUB_OUTPUT
             ls -al
             pwd    
   
@@ -91,7 +92,7 @@ jobs:
     needs: build-packer-image
     runs-on: ubuntu-latest
     env:
-      output1: ${{ needs.build-packer-image.outputs.image_output }}
+      packer_image_id: ${{ needs.build-packer-image.outputs.image_id }}
     steps:
       - uses: actions/checkout@v3
 
@@ -104,6 +105,7 @@ jobs:
       - name: "Fetching values from gcp console"
         id: fetch
         run: |
+          echo packer image is $packer_image_id
           pwd
           ls -al
           echo $env.output1
@@ -113,6 +115,6 @@ jobs:
           kms=$(gcloud secrets versions access 1 --secret="kms")
           chmod 755 run_deployment.sh
           echo $vm_props $webapp_template_name $startup_script $kms
-          ./run_deployment.sh $vm_props $env.output1 $webapp_template_name "$startup_script" $kms
+          ./run_deployment.sh $vm_props $packer_image_id $webapp_template_name "$startup_script" $kms
           ls -al
           pwd
