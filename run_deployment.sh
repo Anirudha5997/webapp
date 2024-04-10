@@ -36,7 +36,7 @@ gcloud beta compute instance-templates create $webapp_template_name \
     --reservation-affinity=any \
 
 gcloud compute instance-groups managed rolling-action start-update $mig \
-    --version=template=projects/$project_id/regions/$region/instanceTemplates/$webapp_template_name --region=$region --maxUnavailable=0
+    --version=template=projects/$project_id/regions/$region/instanceTemplates/$webapp_template_name --region=$region --max-unavailable=0
 
 gcloud compute instance-groups managed wait-until $mig \
     --version-target-reached --region=$region
