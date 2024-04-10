@@ -83,8 +83,8 @@ jobs:
             cat manifest.json
             sudo apt install jq 
             image_id=$(jq '.builds[0].artifact_id' manifest.json)
-            echo $image_id
-            echo $image_id >> $GITHUB_OUTPUT
+            echo "Output [$image_id]"
+            echo "image_id=$image_id ">> $GITHUB_OUTPUT
             ls -al
             pwd    
   
