@@ -34,7 +34,8 @@ jobs:
   build-packer-image:
     needs: build-artifact
     runs-on: ubuntu-latest
-
+    outputs:
+      output1: ${{ steps.build.outputs.image_output }}
     steps:
       - uses: actions/checkout@v3
       
@@ -47,7 +48,7 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS}}'
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       - name: Setup HashiCorp Packer
         uses: hashicorp/setup-packer@main
@@ -65,7 +66,7 @@ jobs:
       - name: Run `packer validate`
         id: validate
         env: 
-            PACKER_CONFIG: ${{secrets.PACKER_CONFIG}}
+            PACKER_CONFIG: ${{ secrets.PACKER_CONFIG }}
         run: |
             cd packer/
             echo "$PACKER_CONFIG" > ./values.pkrvars.hcl
@@ -81,7 +82,36 @@ jobs:
             ls -al
             cat manifest.json
             sudo apt install jq 
-            jq '.builds[0].artifact_id' manifest.json >> image_id.txt
-            cat image_id.txt
+            image_id=(jq '.builds[0].artifact_id' manifest.json)
+            echo "image_output=$image_id" >> $GITHUB_OUTPUT
             ls -al
-            pwd
+            pwd    
+  
+  start-deployment:
+    needs: build-packer-image
+    runs-on: ubuntu-latest
+    env:
+      output1: ${{ needs.build-packer-image.outputs.image_output }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 'Authenticate to Google Cloud'
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: "Fetching values from gcp console"
+        id: fetch
+        run: |
+          pwd
+          ls -al
+          vm_props=(gcloud secrets versions access 1 --secret="vm_props")
+          webapp_template_name=(gcloud secrets versions access 1 --secret="webapp_template_name")
+          startup_script=(gcloud secrets versions access 1 --secret="startup_script")
+          kms=(gcloud secrets versions access 1 --secret="kms")
+          chmod 755 run_deployment.sh 
+          ./run_deployment.sh $vm_props $image_output $webapp_template_name "$startup_script" $kms
+          echo $vm_props $webapp_template_name $startup_script $kms
+          ls -al
+          pwd
