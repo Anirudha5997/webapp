@@ -79,3 +79,4 @@ jobs:
             pwd
             packer build -var-file="values.pkrvars.hcl" .
             ls -al
+            cat manifest.json
