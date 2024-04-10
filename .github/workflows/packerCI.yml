@@ -80,3 +80,8 @@ jobs:
             packer build -var-file="values.pkrvars.hcl" .
             ls -al
             cat manifest.json
+            sudo apt install jq 
+            jq '.builds[0].artifact_id' manifest.json >> image_id.txt
+            cat image_id.txt
+            ls -al
+            pwd
