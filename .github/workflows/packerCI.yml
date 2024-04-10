@@ -82,7 +82,7 @@ jobs:
             ls -al
             cat manifest.json
             sudo apt install jq 
-            image_id=$(jq '.builds[0].artifact_id' manifest.json)
+            image_id=$(jq -r '.builds[0].artifact_id' manifest.json)
             echo "Output [$image_id]"
             echo "image_id=$image_id ">> $GITHUB_OUTPUT
             ls -al
@@ -108,13 +108,11 @@ jobs:
           echo packer image is $packer_image_id
           pwd
           ls -al
-          echo $env.output1
           vm_props=$(gcloud secrets versions access 1 --secret="vm_props")
           webapp_template_name=$(gcloud secrets versions access 1 --secret="webapp_template_name")
           startup_script=$(gcloud secrets versions access 1 --secret="startup_script")
           kms=$(gcloud secrets versions access 1 --secret="kms")
           chmod 755 run_deployment.sh
-          echo $vm_props $webapp_template_name $startup_script $kms
           ./run_deployment.sh $vm_props $packer_image_id $webapp_template_name "$startup_script" $kms
           ls -al
           pwd
