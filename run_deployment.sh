@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 project_id=$1
 machine_type=$2
 network_tier=$3
