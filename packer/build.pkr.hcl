@@ -62,6 +62,11 @@ build {
     script = "./ops_Agent_vm_config.sh"
   }
 
+  post-processor "manifest" {
+    output = "manifest.json"
+    strip_path = true
+  }
+
   // provisioner "shell" {
   //   inline = [
   //     "cd /tmp/",

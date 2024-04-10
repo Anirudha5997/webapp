@@ -78,3 +78,4 @@ jobs:
             cd packer/
             pwd
             packer build -var-file="values.pkrvars.hcl" .
+            ls -al
