@@ -21,7 +21,7 @@ gcloud beta compute instance-templates create $webapp_template_name \
     --machine-type=$machine_type \
     --network-interface=network-tier=$network_tier,subnet=$webapp_subnet \
     --instance-template-region=$region \
-    --metadata=startup-script=$startup_script\
+    --metadata=startup-script="$startup_script"\
     --maintenance-policy=MIGRATE \
     --provisioning-model=STANDARD \
     --service-account=$service_account \
